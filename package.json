@@ -11,7 +11,7 @@
     "bot",
     "piolin"
   ],
-  "author": "storrelba, ele38",
+  "author": "storrelba, ele38, sebastianguerra",
   "license": "GPL-3.0",
   "devDependencies": {
     "@types/node": "^15.0.2"
