@@ -16,7 +16,7 @@ export const createDataFolders = (): void => {
 /**
  * This function will return the lines from a config file
  * 
- * @return void
+ * @return string[]
  */
 export const getConfigLines = (file_name: string): string[]  => {
     const data: string = readFileSync(`./data/input/${file_name}`, "utf8");
