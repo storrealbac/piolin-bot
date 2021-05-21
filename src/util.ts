@@ -1,5 +1,7 @@
 import { spawnSync } from "child_process";
-import { readFileSync, writeFile, writeFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 
 /**
  * This function will create the default proyect folders
@@ -11,7 +13,6 @@ export const createDataFolders = (): void => {
     spawnSync("mkdir", ["-p", `./data/cropped/images/`]);
     spawnSync("mkdir", ["-p", `./data/output/images`]);
 }
-
 /**
  * This function will return the lines from a config file
  * 
@@ -47,11 +48,11 @@ export const randomNumbersArray = (min: number, max: number, size: number): numb
  * @return string
  */
 export const getRandomThemeAndRemove = (): string => {
-    let data: string[] = getConfigLines("./themes.txt");
+    let data: string[] = getConfigLines(`./${process.env.THEMES_LIST}`);
     const theme_number: number = getRandomNumber(0, data.length);
     const theme = data[theme_number];
     data.splice(theme_number, 1);
-    writeFileSync("./themes.txt", data.join("\n"), "utf-8");
+    writeFileSync(`./${process.env.THEMES_LIST}`, data.join("\n"), "utf-8");
     return theme;
 }
 
@@ -62,6 +63,15 @@ export const getRandomThemeAndRemove = (): string => {
  */
 export const getRandomNumber = (min: number, max: number) => {
     return Math.floor(Math.random() * (max-min))+min;
+}
+
+/**
+ * This function will return if exist lines in the file
+ * @param file_path Path where the file is saved
+ */
+export const existData = (file_path: string) => {
+    const file: string[] = getConfigLines(file_path);
+    return (file.length == 1 && file[0] == "") ? false : true
 }
 
 /**

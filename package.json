@@ -6,7 +6,8 @@
   "scripts": {
     "run": "./run.sh",
     "build": "./build.sh",
-    "build_and_run": "./build.sh;./run.sh"
+    "build_and_run": "./build.sh;./run.sh",
+    "dev": "./build.sh;echo \"Running in development mode\";node dist/main.js --trace-warnings"
   },
   "keywords": [
     "boomer",
@@ -18,9 +19,12 @@
   "devDependencies": {
     "@types/duckduckgo-images-api": "^1.0.0",
     "@types/node": "^15.0.2",
+    "@types/dotenv": "^8.2.0",
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "colorette": "^1.2.2",
+    "dotenv": "^9.0.2",
     "duckduckgo-images-api": "^1.0.5",
     "node-libcurl": "^2.3.3"
   }

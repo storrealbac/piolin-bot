@@ -2,6 +2,8 @@ import { DuckDuckGoImage, image_search } from "duckduckgo-images-api";
 import { curly, CurlyResult } from "node-libcurl";
 import { spawnSync } from "child_process";
 import fs from "fs";
+import dotenv from "dotenv";
+dotenv.config();
 
 /**
 * This function gets image info from DuckDuckGo
@@ -12,7 +14,7 @@ export const getImageInfoPack = async (query: string): Promise<DuckDuckGoImage[]
 
     const search_config = {
         query,
-        moderate: true,
+        moderate: (process.env.SAFE_MODE == "true") ? true : false,
         iterations: 3,
     };
 
