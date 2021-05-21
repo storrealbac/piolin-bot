@@ -81,3 +81,15 @@ export const existData = (file_path: string) => {
 export const deleteFolder = (folder_path: string): void => {
     spawnSync("rm", ["-rf", `./data/${folder_path}`]);
 }
+
+/**
+ * This function return if the img source is blocked
+ * @param url   URL to compare
+ */
+export const isIgnoredWebsite = (url: string): boolean => {
+    const websites_url: string[] = getConfigLines(process.env.IGNORED_WEBSITES||"ignorewebsites.txt");
+    websites_url.forEach( (_url: string) => {
+        if (url == _url) return true;
+    });
+    return false;
+}

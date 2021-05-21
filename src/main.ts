@@ -8,9 +8,11 @@ import {
     getRandomThemeAndRemove, 
     randomNumbersArray, 
     deleteFolder,
-    existData
+    existData,
+    isIgnoredWebsite
 } from "./util";
 import { bgRedBright, bgYellowBright, bold, options, bgGreenBright, bgBlueBright } from "colorette";
+import { DuckDuckGoImage } from "duckduckgo-images-api";
 
 // create default folders
 createDataFolders();
@@ -33,6 +35,8 @@ const info_pack = getImageInfoPack(theme);
 const list_name: string[] = getConfigLines(process.env.NAME_LIST||"names.txt");
 
 info_pack.then( async (res) => {
+
+    console.log(res);
 
     let coverpage_download = await downloadImage(res[getRandomNumber(0, 300)].image);
     console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(theme)} cover page.`);
@@ -58,12 +62,14 @@ info_pack.then( async (res) => {
     console.log(`${bgGreenBright(`${bold(" STARTING ")}`)} Generating random numbers set.`);
     const random_array: number[] = randomNumbersArray(0, 100, list_name.length);
     random_array.forEach( async (random_number: number, i: number) => {
-        let download = await downloadImage(res[random_number].image);
-        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
 
+        let download_info: DuckDuckGoImage = res[random_number];
+
+        let download = await downloadImage(download_info.image);
+        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
         while(true) {
             // if something wrong with the download, re-download
-            if (download.statusCode != 200) {
+            if (download.statusCode != 200 || isIgnoredWebsite(download_info.url)) {
                 download = await downloadImage(res[getRandomNumber(0, 100)].image);
                 console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Re-downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
             } else break;
