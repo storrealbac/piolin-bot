@@ -36,8 +36,6 @@ const list_name: string[] = getConfigLines(process.env.NAME_LIST||"names.txt");
 
 info_pack.then( async (res) => {
 
-    console.log(res);
-
     let coverpage_download = await downloadImage(res[getRandomNumber(0, 300)].image);
     console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(theme)} cover page.`);
 
