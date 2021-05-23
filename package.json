@@ -1,7 +1,7 @@
 {
   "name": "piolin-bot",
   "version": "1.0.0",
-  "description": "A boomer post generator",
+  "description": "An image generator about \"what kind of person are you\" memes. Using ImageMagick as a processor. ",
   "main": "main.js",
   "scripts": {
     "run": "./run.sh",
