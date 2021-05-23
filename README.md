@@ -65,7 +65,7 @@ __themes.txt__\
 These are the topics where the bot will look for images \
 _(The bot deletes the selected topic at random so that it will not be repeated the next time)_
 
-```js
+```
 balls
 chair
 carpet
@@ -75,7 +75,7 @@ book
 ```
 __names.txt__\
 These are the names that are used for the images
-```js
+```
 John
 Steve
 Sebastián
