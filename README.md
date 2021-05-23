@@ -4,10 +4,9 @@ An image generator about "what kind of person are you" memes. Using [ImageMagick
 
 ## Installation ⚙️
 ### Prerequisites
-
-- [https://imagemagick.org/index.php](ImageMagick)
-- [https://nodejs.org/a](Node.js)
-- [https://www.typescriptlang.org/](Typescript)
+- [ImageMagick](https://imagemagick.org/index.php)
+- [Node.js](https://nodejs.org/a)
+- [Typescript](https://www.typescriptlang.org/)
 
 #### Debian
 ```bash
