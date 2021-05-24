@@ -13,6 +13,7 @@ import {
 } from "./util";
 import { bgRedBright, bgYellowBright, bold, options, bgGreenBright, bgBlueBright } from "colorette";
 import { DuckDuckGoImage } from "duckduckgo-images-api";
+import { CurlyResult } from "node-libcurl";
 
 // create default folders
 createDataFolders();
@@ -63,32 +64,39 @@ info_pack.then( async (res) => {
 
         let download_info: DuckDuckGoImage = res[random_number];
 
-        let download = await downloadImage(download_info.image);
-        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-        while(true) {
-            // if something wrong with the download, re-download
-            if (download.statusCode != 200 || isIgnoredWebsite(download_info.url)) {
-                download = await downloadImage(res[getRandomNumber(0, 100)].image);
-                console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Re-downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-            } else break;
+        let download: CurlyResult<Buffer>;
+        try {
+            download = await downloadImage(download_info.image);
+            console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+            while(true) {
+                // if something wrong with the download, re-download
+                if (download.statusCode != 200 || isIgnoredWebsite(download_info.url)) {
+                    download = await downloadImage(res[getRandomNumber(0, 100)].image);
+                    console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Re-downloading ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+                } else break;
+            }
+
+            // Save the image
+            console.log(`${bgGreenBright(`${bold(" SUCCESSFUL ")}`)} Downloaded ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+            
+            console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Writing ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+            imageWriter(download.data, theme, list_name[i]);
+            
+            console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Cropping & Resizing ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+            cropAndResizeImage(list_name[i], theme);
+            
+            console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Putting captions ${bold(list_name[i])} image from ${bold(theme)} theme.`);
+            captionImage(list_name[i], theme, list_name[i]);
+
+        } catch(e) {
+            console.log(`${bgRedBright(`${bold(" ERROR ")}`)} There was an error downloading an image, ignoring image`);
         }
 
-        // Save the image
-        console.log(`${bgGreenBright(`${bold(" SUCCESSFUL ")}`)} Downloaded ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-        
-        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Writing ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-        imageWriter(download.data, theme, list_name[i]);
-        
-        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Cropping & Resizing ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-        cropAndResizeImage(list_name[i], theme);
-        
-        console.log(`${bgYellowBright(`${bold(" TRYING ")}`)} Putting captions ${bold(list_name[i])} image from ${bold(theme)} theme.`);
-        captionImage(list_name[i], theme, list_name[i]);
-
-        // deleting (finishing process)
-        console.log(`${bgBlueBright(`${bold(" FINISHED ")}`)} Removing ${bold("input")} & ${bold("cropped")} folders.`);
-        deleteFolder(`/input/images/${theme}`);
-        deleteFolder(`/cropped/images/${theme}`);
     });
+
+    // deleting (finishing process)
+    console.log(`${bgBlueBright(`${bold(" FINISHED ")}`)} Removing ${bold("input")} & ${bold("cropped")} folders.`);
+    deleteFolder(`/input/images/${theme}`);
+    deleteFolder(`/cropped/images/${theme}`);
 
 });
