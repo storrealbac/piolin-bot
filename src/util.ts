@@ -4,15 +4,19 @@ import dotenv from "dotenv";
 dotenv.config();
 
 /**
- * This function will create the default proyect folders
+ * This function will create the initial config proyect
  * 
  * @return void
  */
-export const createDataFolders = (): void => {
+export const createInitialConfig = (): void => {
     spawnSync("mkdir", ["-p", `./data/input/images/`]);
     spawnSync("mkdir", ["-p", `./data/cropped/images/`]);
     spawnSync("mkdir", ["-p", `./data/output/images`]);
+    spawnSync("touch", [`names.txt`]);
+    spawnSync("touch", [`themes.txt`]);
+    spawnSync("touch", [`ignorewebsites.txt`]);
 }
+
 /**
  * This function will return the lines from a config file
  * 
