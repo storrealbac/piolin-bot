@@ -31,17 +31,19 @@ export const getConfigLines = (file_name: string): string[]  => {
  */
 export const randomNumbersArray = (min: number, max: number, size: number): number[] => {
 
-    let numbers: Set<number> = new Set<number>();
+    let numbers: number[] = [];
+    let response: number[] = [];
 
-    for (let i = 0; i < size;) {
-        const generated_number = Math.floor(Math.random() * (max-min))+min;
-        if (!numbers.has(generated_number)) {
-            numbers.add(generated_number);
-            i++
-        }
+    for (let i = min; i < max; i++)
+        numbers.push(i);
+    
+    for (let i = 0; i < size; i++) {
+        const generated_number = Math.floor(Math.random() * numbers.length);
+        response.push(numbers[generated_number]);
+        numbers.splice(numbers[generated_number], 1);
     }
 
-    return Array.from(numbers);
+    return response;
 }
 /**
  * This function get a random theme and delete it in the file
